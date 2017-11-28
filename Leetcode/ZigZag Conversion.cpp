@@ -1,33 +1,33 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <deque>
 
 using namespace std;
 
 class Solution {
 public:
     string convert(string s, int numRows) {
-        vector<deque<char>> cycle(numRows, deque<char>());
+        if (numRows == 1)
+            return s;
 
-        auto change = 1;
+        vector<string> cycle(numRows, string());
+
+        auto step = 1;
         auto index = 0;
         for(auto c: s) {
             cycle[index].push_back(c);
-            index += change;
-            if(index == numRows) {
-                index -= 2;
-                change = -1;
-            }
-            if(index == -1) {
-                index += 2;
-                change = 1;
-            }
+            
+            if (index == 0)
+                step = 1;
+            if (index == numRows - 1)
+                step = -1;
+
+            index += step;
         }
 
         string result{};
-        for(auto& queue: cycle) {
-            result.append(queue.begin(), queue.end());
+        for(auto& row: cycle) {
+            result.append(row);
         }
 
         return result;
@@ -39,7 +39,11 @@ public:
 int main() {
     Solution solution;
     cout << solution.convert("PAYPALISHIRING", 3) << '\n';
+    cout << solution.convert("PAYPALISHIRING", 4) << '\n';
+    cout << solution.convert("PAYPALISHIRING", 5) << '\n';
+    cout << solution.convert("PAYPALISHIRING", 6) << '\n';
     cout << solution.convert("PAYPALISHIRING", 9) << '\n';
+    cout << solution.convert("AB", 1) << '\n';
     system("pause");
     return 0;
 }
